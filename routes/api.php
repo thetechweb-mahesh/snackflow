@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Admin\ShopController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ItemController;
+use App\Http\Controllers\Admin\OrderController;
 
 
 /*
@@ -29,5 +32,35 @@ Route::middleware('auth:sanctum')->group(function () {
     //shoprout
     Route::post('/shops', [ShopController::class, 'store']);
 
+    //CategoryController
+    Route::get(
+        '/categories',
+        [CategoryController::class,'index']
+    );
+
+    Route::post(
+        '/categories',
+        [CategoryController::class,'store']
+    );
+    Route::apiResource('categories', CategoryController::class);
+
+    //ItemController
+     Route::get(
+        '/items',
+        [ItemController::class,'index']
+    );
+
+    Route::post(
+        '/items',
+        [ItemController::class,'store']
+    );
+        Route::apiResource('items', ItemController::class);
+
+     //OrderController
+     
+       Route::post(
+        '/orders',
+        [OrderController::class,'store']
+    );
 });
 

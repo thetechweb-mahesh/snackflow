@@ -1,28 +1,26 @@
 import Sidebar from "../components/layout/Sidebar";
 import Header from "../components/layout/Header";
 
-const DashboardLayout = ({ children }) => {
+export default function DashboardLayout({
+    children,
+}) {
+    return (
+        <div className="flex">
 
-  return (
+            <Sidebar />
 
-    <div className="flex bg-gray-100">
+            <div className="flex-1 bg-gray-100 min-h-screen">
 
-      <Sidebar />
+                <Header />
 
-      <div className="flex-1 min-h-screen">
+                <div className="p-6">
 
-        <Header />
+                    {children}
 
-        <div className="p-6">
+                </div>
 
-          {children}
+            </div>
 
         </div>
-
-      </div>
-
-    </div>
-  );
-};
-
-export default DashboardLayout;
+    );
+}

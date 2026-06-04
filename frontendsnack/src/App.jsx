@@ -8,6 +8,9 @@ import {
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
+import Categories  from "./pages/Categories/Categories";
+import Items from "./pages/Items/Items";
+import POS from "./pages/POS/POS";
 
 function App() {
 
@@ -35,6 +38,19 @@ function App() {
             element={<Dashboard />}
         />
 
+<Route
+    path="/categories"
+    element={<Categories />}
+/>
+<Route
+    path="/items"
+    element={<Items />}
+/>
+
+<Route
+    path="/pos"
+    element={<POS />}
+/>
     </Routes>
 </BrowserRouter>
     );

@@ -30,79 +30,144 @@ export default function Register() {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10">
+       <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
 
-            <h1 className="text-2xl font-bold mb-5">
-                Create Shop
+    <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8">
+
+        <div className="text-center mb-8">
+
+            <h1 className="text-3xl font-bold text-gray-800">
+                Create Your Shop
             </h1>
 
-            <form onSubmit={handleSubmit}>
+            <p className="text-gray-500 mt-2">
+                Start managing orders, billing & QR menus with SnackFlow
+            </p>
+
+        </div>
+
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+        >
+
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Shop Name
+                </label>
 
                 <input
-                    placeholder="Shop Name"
-                    className="border p-2 w-full mb-3"
+                    type="text"
+                    placeholder="e.g. Sharma Fast Food"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={(e) =>
                         setForm({
                             ...form,
-                            shop_name: e.target.value
+                            shop_name: e.target.value,
                         })
                     }
                 />
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Owner Name
+                </label>
 
                 <input
-                    placeholder="Owner Name"
-                    className="border p-2 w-full mb-3"
+                    type="text"
+                    placeholder="Enter owner name"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={(e) =>
                         setForm({
                             ...form,
-                            name: e.target.value
+                            name: e.target.value,
                         })
                     }
                 />
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address
+                </label>
 
                 <input
-                    placeholder="Email"
-                    className="border p-2 w-full mb-3"
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={(e) =>
                         setForm({
                             ...form,
-                            email: e.target.value
+                            email: e.target.value,
                         })
                     }
                 />
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Password
+                </label>
 
                 <input
                     type="password"
-                    placeholder="Password"
-                    className="border p-2 w-full mb-3"
+                    placeholder="Create password"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={(e) =>
                         setForm({
                             ...form,
-                            password: e.target.value
+                            password: e.target.value,
                         })
                     }
                 />
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Confirm Password
+                </label>
 
                 <input
                     type="password"
-                    placeholder="Confirm Password"
-                    className="border p-2 w-full mb-3"
+                    placeholder="Confirm password"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={(e) =>
                         setForm({
                             ...form,
                             password_confirmation:
-                                e.target.value
+                                e.target.value,
                         })
                     }
                 />
+            </div>
 
-                <button
-                    className="bg-black text-white px-4 py-2"
-                >
-                    Register
-                </button>
+            <button
+                type="submit"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition duration-200"
+            >
+                Create Shop
+            </button>
 
-            </form>
+        </form>
+
+        <div className="text-center mt-6">
+
+            <p className="text-gray-500 text-sm">
+                Already have an account?
+            </p>
+
+            <a
+                href="/login"
+                className="text-orange-500 font-semibold hover:text-orange-600"
+            >
+                Login Here
+            </a>
+
         </div>
+
+    </div>
+
+</div>
     );
 }

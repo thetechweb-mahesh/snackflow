@@ -1,22 +1,68 @@
-import React from 'react'
+import DashboardLayout from "../layouts/DashboardLayout";
 
 export default function Dashboard() {
 
-    const user = JSON.parse(
-        localStorage.getItem("user")
-    );
-
     return (
-        <div className="p-10">
+        <DashboardLayout>
 
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-3xl font-bold mb-6">
 
-                Welcome
-
-                {user?.name}
+                Dashboard
 
             </h1>
 
-        </div>
+            <div className="grid md:grid-cols-4 gap-4">
+
+                <div className="bg-white p-5 rounded-xl shadow">
+
+                    <h3 className="text-gray-500">
+                        Today Sales
+                    </h3>
+
+                    <p className="text-2xl font-bold">
+                        ₹0
+                    </p>
+
+                </div>
+
+                <div className="bg-white p-5 rounded-xl shadow">
+
+                    <h3 className="text-gray-500">
+                        Orders
+                    </h3>
+
+                    <p className="text-2xl font-bold">
+                        0
+                    </p>
+
+                </div>
+
+                <div className="bg-white p-5 rounded-xl shadow">
+
+                    <h3 className="text-gray-500">
+                        Customers
+                    </h3>
+
+                    <p className="text-2xl font-bold">
+                        0
+                    </p>
+
+                </div>
+
+                <div className="bg-white p-5 rounded-xl shadow">
+
+                    <h3 className="text-gray-500">
+                        Items
+                    </h3>
+
+                    <p className="text-2xl font-bold">
+                        0
+                    </p>
+
+                </div>
+
+            </div>
+
+        </DashboardLayout>
     );
 }
