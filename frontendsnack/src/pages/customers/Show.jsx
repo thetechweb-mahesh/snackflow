@@ -1,51 +1,42 @@
 import { useEffect, useState } from "react";
-import DashboardLayout from "../layouts/DashboardLayout";
-import api from "../api/axios";
+import { useParams } from "react-router-dom";
+import DashboardLayout from "../../layouts/DashboardLayout";
+import api from "../../api/axios";
 
+export default function Show() {
 
-export default function Dashboard() {
+    const { id } = useParams();
 
-    const [stats, setStats] = useState({
-        today_sales: 0,
-        today_orders: 0,
-        total_items: 0,
-        top_item: null,
-        recent_orders: [],
-    });
-
-    const [loading, setLoading] = useState(true);
+    const [data, setData] =
+        useState(null);
 
     useEffect(() => {
-        fetchDashboardStats();
+        fetchCustomer();
     }, []);
 
-    const fetchDashboardStats = async () => {
+    const fetchCustomer = async () => {
 
         try {
 
             const res = await api.get(
-                "/dashboard/stats"
+                `/customers/${id}`
             );
 
-            setStats(res.data);
+            setData(res.data);
 
         } catch (error) {
 
             console.log(error);
 
-        } finally {
-
-            setLoading(false);
-
         }
     };
 
-    if (loading) {
+    if (!data) {
 
         return (
             <DashboardLayout>
                 <div className="p-6">
-                    Loading Dashboard...
+                    Loading...
                 </div>
             </DashboardLayout>
         );
@@ -56,57 +47,41 @@ export default function Dashboard() {
 
             <div className="space-y-6">
 
-                {/* Header */}
+                {/* Customer Info */}
 
-                <div>
+                <div className="bg-white rounded-xl shadow p-6">
 
-                    <h1 className="text-3xl font-bold">
-                        Dashboard
+                    <h1 className="text-2xl font-bold">
+                        {data.customer.name}
                     </h1>
 
                     <p className="text-gray-500">
-                        Welcome to SnackFlow POS
+                        {data.customer.phone}
+                    </p>
+
+                    <p className="text-gray-500">
+                        {data.customer.email}
+                    </p>
+
+                    <p className="text-gray-500">
+                        {data.customer.address}
                     </p>
 
                 </div>
 
-                {/* Stats Cards */}
+                {/* Stats */}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-                    <div className="bg-white rounded-xl shadow p-5">
-
-                            <h3 className="text-gray-500">
-                                Today's Expenses
-                            </h3>
-
-                            <p className="text-3xl font-bold mt-2">
-                                ₹{stats.today_expenses}
-                            </p>
-
-                        </div>
-
-
-                        <div className="bg-white rounded-xl shadow p-5">
-
-                                <h3 className="text-gray-500">
-                                    Today's Profit
-                                </h3>
-
-                                <p className="text-3xl font-bold mt-2">
-                                    ₹{stats.today_profit}
-                                </p>
-
-                            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <div className="bg-white rounded-xl shadow p-5">
 
                         <h3 className="text-gray-500">
-                            Today's Sales
+                            Total Orders
                         </h3>
 
                         <p className="text-3xl font-bold mt-2">
-                            ₹{stats.today_sales}
+                            {data.total}
+                             {/* {data.total_orders} */}
                         </p>
 
                     </div>
@@ -114,45 +89,18 @@ export default function Dashboard() {
                     <div className="bg-white rounded-xl shadow p-5">
 
                         <h3 className="text-gray-500">
-                            Today's Orders
+                            Lifetime Spend
                         </h3>
 
                         <p className="text-3xl font-bold mt-2">
-                            {stats.today_orders}
-                        </p>
-
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow p-5">
-
-                        <h3 className="text-gray-500">
-                            Total Items
-                        </h3>
-
-                        <p className="text-3xl font-bold mt-2">
-                            {stats.total_items}
-                        </p>
-
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow p-5">
-
-                        <h3 className="text-gray-500">
-                            Top Selling Item
-                        </h3>
-
-                        <p className="text-xl font-bold mt-2">
-
-                            {stats.top_item?.item?.name ||
-                                "No Sales"}
-
+                            ₹{data.total_spend}
                         </p>
 
                     </div>
 
                 </div>
 
-                {/* Recent Orders */}
+                {/* Orders */}
 
                 <div className="bg-white rounded-xl shadow overflow-hidden">
 
@@ -182,33 +130,29 @@ export default function Dashboard() {
                                     Payment
                                 </th>
 
-                                <th className="p-4 text-left">
-                                    Date
-                                </th>
-
                             </tr>
 
                         </thead>
 
                         <tbody>
 
-                            {stats.recent_orders
+                            {data.recent_orders
                                 ?.length === 0 ? (
 
                                 <tr>
 
                                     <td
-                                        colSpan="4"
-                                        className="text-center py-6 text-gray-500"
+                                        colSpan="3"
+                                        className="text-center py-6"
                                     >
-                                        No Orders Found
+                                        No Orders
                                     </td>
 
                                 </tr>
 
                             ) : (
 
-                                stats.recent_orders?.map(
+                                data.recent_orders.map(
                                     (order) => (
 
                                         <tr
@@ -233,12 +177,6 @@ export default function Dashboard() {
                                                 {
                                                     order.payment_method
                                                 }
-                                            </td>
-
-                                            <td className="p-4">
-                                                {new Date(
-                                                    order.created_at
-                                                ).toLocaleDateString()}
                                             </td>
 
                                         </tr>

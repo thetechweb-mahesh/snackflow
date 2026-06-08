@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import api from "../../api/axios";
 
-export default function POS() {
+export default function Create() {
+
     const [categories, setCategories] = useState([]);
     const [items, setItems] = useState([]);
     const [cart, setCart] = useState([]);
+const [customers, setCustomers] =useState([]);
 
+const [customerId, setCustomerId] =
+    useState("");
     const [selectedCategory, setSelectedCategory] =
         useState(null);
 
@@ -15,6 +19,7 @@ export default function POS() {
 
     useEffect(() => {
         fetchCategories();
+         fetchCustomers();
         fetchItems();
     }, []);
 
@@ -30,6 +35,7 @@ export default function POS() {
     const fetchItems = async () => {
         try {
             const res = await api.get("/items");
+              console.log(res.data);
             setItems(res.data);
         } catch (error) {
             console.log(error);
@@ -44,11 +50,13 @@ export default function POS() {
         : items;
 
     const addToCart = (item) => {
+       console.log("Clicked Item", item);
         const existing = cart.find(
             (c) => c.id === item.id
         );
 
         if (existing) {
+
             setCart(
                 cart.map((c) =>
                     c.id === item.id
@@ -59,7 +67,9 @@ export default function POS() {
                         : c
                 )
             );
+
         } else {
+
             setCart([
                 ...cart,
                 {
@@ -71,6 +81,7 @@ export default function POS() {
     };
 
     const increaseQty = (id) => {
+
         setCart(
             cart.map((item) =>
                 item.id === id
@@ -84,6 +95,7 @@ export default function POS() {
     };
 
     const decreaseQty = (id) => {
+
         setCart(
             cart
                 .map((item) =>
@@ -99,6 +111,7 @@ export default function POS() {
     };
 
     const removeItem = (id) => {
+
         setCart(
             cart.filter(
                 (item) => item.id !== id
@@ -130,9 +143,17 @@ const placeOrder = async () => {
         console.log(payload);
 
         const res = await api.post(
-            "/orders",
-            payload
-        );
+                "/orders",
+                {
+                    customer_id:
+                        customerId || null,
+
+                    items: cart,
+
+                    payment_method:
+                        paymentMethod
+                }
+            );
 
         alert("Order Created Successfully");
 
@@ -143,6 +164,26 @@ const placeOrder = async () => {
         console.log(error);
 
         alert("Failed to create order");
+    }
+};
+
+const fetchCustomers = async () => {
+
+    try {
+
+        const res =
+            await api.get(
+                "/customers"
+            );
+
+        setCustomers(
+            res.data
+        );
+
+    } catch (error) {
+
+        console.log(error);
+
     }
 };
     return (
@@ -185,12 +226,51 @@ const placeOrder = async () => {
 
                 </div>
 
+                
+
                 {/* Items */}
 
                 <div className="col-span-6 bg-white rounded-xl p-4">
+                     <div>
 
+    <label className="block mb-2 font-medium">
+        Customer
+    </label>
+
+    <select
+        value={customerId}
+        onChange={(e) =>
+            setCustomerId(
+                e.target.value
+            )
+        }
+        className="w-full border rounded-lg p-2"
+    >
+
+        <option value="">
+            Walk-In Customer
+        </option>
+
+        {customers.map(
+            (customer) => (
+
+                <option
+                    key={customer.id}
+                    value={customer.id}
+                >
+                    {customer.name}
+                    {" - "}
+                    {customer.phone}
+                </option>
+
+            )
+        )}
+
+    </select>
+
+</div>
                     <h2 className="font-bold mb-4">
-                        Items
+                        Menu Items
                     </h2>
 
                     <div className="grid grid-cols-3 gap-3">
@@ -202,14 +282,14 @@ const placeOrder = async () => {
                                 onClick={() =>
                                     addToCart(item)
                                 }
-                                className="border rounded-xl p-4 hover:bg-blue-50"
+                                className="border rounded-xl p-4 hover:bg-blue-50 text-left"
                             >
 
                                 <h3 className="font-semibold">
                                     {item.name}
                                 </h3>
 
-                                <p>
+                                <p className="text-green-600">
                                     ₹{item.price}
                                 </p>
 
@@ -226,12 +306,12 @@ const placeOrder = async () => {
                 <div className="col-span-4 bg-white rounded-xl p-4">
 
                     <h2 className="font-bold mb-4">
-                        Cart
+                        Current Order
                     </h2>
 
                     {cart.length === 0 && (
-                        <p>
-                            No items added
+                        <p className="text-gray-500">
+                            No items selected
                         </p>
                     )}
 
@@ -250,28 +330,24 @@ const placeOrder = async () => {
 
                                 <button
                                     onClick={() =>
-                                        removeItem(
-                                            item.id
-                                        )
+                                        removeItem(item.id)
                                     }
                                     className="text-red-500"
                                 >
-                                    X
+                                    Remove
                                 </button>
 
                             </div>
 
-                            <div className="flex items-center justify-between mt-2">
+                            <div className="flex justify-between items-center mt-2">
 
                                 <div className="flex gap-2">
 
                                     <button
                                         onClick={() =>
-                                            decreaseQty(
-                                                item.id
-                                            )
+                                            decreaseQty(item.id)
                                         }
-                                        className="px-2 bg-gray-200 rounded"
+                                        className="px-3 py-1 bg-gray-200 rounded"
                                     >
                                         -
                                     </button>
@@ -282,11 +358,9 @@ const placeOrder = async () => {
 
                                     <button
                                         onClick={() =>
-                                            increaseQty(
-                                                item.id
-                                            )
+                                            increaseQty(item.id)
                                         }
-                                        className="px-2 bg-gray-200 rounded"
+                                        className="px-3 py-1 bg-gray-200 rounded"
                                     >
                                         +
                                     </button>
@@ -295,8 +369,10 @@ const placeOrder = async () => {
 
                                 <span>
                                     ₹
-                                    {item.price *
-                                        item.qty}
+                                    {(
+                                        item.price *
+                                        item.qty
+                                    ).toFixed(2)}
                                 </span>
 
                             </div>
@@ -305,22 +381,20 @@ const placeOrder = async () => {
 
                     ))}
 
-                    <div className="mt-4 border-t pt-4">
+                    <div className="border-t mt-4 pt-4">
 
-                        <h3 className="font-bold mb-2">
+                        <label className="block mb-2 font-medium">
                             Payment Method
-                        </h3>
+                        </label>
 
                         <select
-                            value={
-                                paymentMethod
-                            }
+                            value={paymentMethod}
                             onChange={(e) =>
                                 setPaymentMethod(
                                     e.target.value
                                 )
                             }
-                            className="border p-2 w-full rounded"
+                            className="border p-2 w-full rounded-lg"
                         >
                             <option value="cash">
                                 Cash
@@ -331,14 +405,13 @@ const placeOrder = async () => {
                             </option>
                         </select>
 
-                        <div className="mt-4 text-xl font-bold">
+                        <div className="mt-4 text-2xl font-bold">
 
                             Total ₹
                             {total.toFixed(2)}
 
                         </div>
-
-  <button
+                        <button
     onClick={placeOrder}
     disabled={!cart.length}
     className="w-full bg-green-600 text-white py-3 rounded-xl mt-4 disabled:bg-gray-400"
@@ -347,7 +420,8 @@ const placeOrder = async () => {
 </button>
 
                         {/* <button
-                            className="w-full bg-green-600 text-white py-3 rounded-xl mt-4"
+                            disabled={!cart.length}
+                            className="w-full bg-green-600 text-white py-3 rounded-xl mt-4 disabled:bg-gray-400"
                         >
                             Place Order
                         </button> */}

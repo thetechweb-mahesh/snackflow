@@ -8,6 +8,13 @@ use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ItemController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ExpenseCategoryController;
+use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\MenuController;
+
 
 
 /*
@@ -23,8 +30,82 @@ use App\Http\Controllers\Admin\OrderController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/settings', [ShopController::class, 'getSettings']);
+    Route::put('/settings', [ShopController::class, 'updateSettings']);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
 
+    Route::get('/dashboard/stats',[DashboardController::class,'stats']);
+
+
+
+        Route::get(
+        '/expense-categories',
+        [ExpenseCategoryController::class,'index']
+    );
+
+    Route::post(
+        '/expense-categories',
+        [ExpenseCategoryController::class,'store']
+    );
+
+    Route::put(
+        '/expense-categories/{id}',
+        [ExpenseCategoryController::class,'update']
+    );
+
+    Route::delete(
+        '/expense-categories/{id}',
+        [ExpenseCategoryController::class,'destroy']
+    );
+
+
+    //
+    Route::get(
+    '/expenses',
+    [ExpenseController::class,'index']
+);
+
+Route::post(
+    '/expenses',
+    [ExpenseController::class,'store']
+);
+
+ Route::put(
+        '/expenses/{id}',
+        [ExpenseController::class,'update']
+    );
+
+Route::delete(
+    '/expenses/{id}',
+    [ExpenseController::class,'destroy']
+);
+
+//
+
+//
+
+Route::get(
+    '/reports/summary',
+    [ReportController::class, 'summary']
+);
+
+//
+Route::apiResource(
+    'customers',
+    CustomerController::class
+);
+//
+
+
+
+Route::get(
+    '/menu/{slug}',
+    [MenuController::class,'index']
+);
     Route::get('/user', [AuthController::class, 'user']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -33,34 +114,26 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/shops', [ShopController::class, 'store']);
 
     //CategoryController
-    Route::get(
-        '/categories',
-        [CategoryController::class,'index']
-    );
+    Route::get('/categories',[CategoryController::class,'index']);
 
-    Route::post(
-        '/categories',
-        [CategoryController::class,'store']
-    );
+    Route::post('/categories',[CategoryController::class,'store']);
     Route::apiResource('categories', CategoryController::class);
 
     //ItemController
-     Route::get(
-        '/items',
-        [ItemController::class,'index']
+     Route::get('/items',[ItemController::class,'index']
     );
 
-    Route::post(
-        '/items',
-        [ItemController::class,'store']
-    );
+    Route::post('/items',[ItemController::class,'store']);
         Route::apiResource('items', ItemController::class);
 
      //OrderController
-     
-       Route::post(
-        '/orders',
-        [OrderController::class,'store']
-    );
+    Route::get('/orders',[OrderController::class,'index']);
+    Route::post('/orders',[OrderController::class,'store']);
+    Route::get('/orders/{id}',[OrderController::class,'show']);
+    Route::get(
+    '/orders/{id}/download',
+    [OrderController::class,'download']
+);
+       
 });
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreShopRequest;
+use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -53,4 +53,42 @@ class ShopController extends Controller
             ],500);
         }
     }
+
+
+
+    //
+
+
+public function getSettings()
+{
+    return Shop::findOrFail(auth()->user()->shop_id);
+}
+  public function updateSettings(Request $request)
+{
+    try {
+
+        $shop = Shop::findOrFail(
+            auth()->user()->shop_id
+        );
+
+        $shop->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'address' => $request->address,
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'error' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile()
+        ], 500);
+    }
+}
 }

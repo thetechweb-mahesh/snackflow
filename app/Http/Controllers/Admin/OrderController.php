@@ -4,9 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Item;
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
+    public function index()
+{
+    return Order::where(
+        'shop_id',
+        auth()->user()->shop_id
+    )
+    ->latest()
+    ->get();
+}
     public function store(Request $request)
 {
     DB::beginTransaction();
@@ -29,6 +43,10 @@ class OrderController extends Controller
 
         $order = Order::create([
             'shop_id' => auth()->user()->shop_id,
+            //
+            'customer_id' =>
+        $request->customer_id,
+            //
             'invoice_no' => 'INV-' . time(),
             'total' => $total,
             'payment_method' =>
@@ -68,5 +86,43 @@ class OrderController extends Controller
             'message' => $e->getMessage()
         ],500);
     }
+}
+
+
+public function show($id)
+{
+    $order = Order::with([
+        'items.item'
+    ])
+    ->where(
+        'shop_id',
+        auth()->user()->shop_id
+    )
+    ->findOrFail($id);
+
+    return response()->json(
+        $order
+    );
+}
+
+public function download($id)
+{
+    $order = Order::with([
+        'items.item'
+    ])
+    ->where(
+        'shop_id',
+        auth()->user()->shop_id
+    )
+    ->findOrFail($id);
+
+    $pdf = Pdf::loadView(
+        'pdf.invoice',
+        compact('order')
+    );
+
+    return $pdf->download(
+        $order->invoice_no . '.pdf'
+    );
 }
 }

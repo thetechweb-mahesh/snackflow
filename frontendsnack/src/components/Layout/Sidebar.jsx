@@ -42,6 +42,12 @@ export default function Sidebar() {
                     <FaHome />
                     Dashboard
                 </Link>
+                <Link
+    to="/settings"
+    className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
+>
+    Settings
+</Link>
 
                 <Link
                     to="/categories"
@@ -50,7 +56,13 @@ export default function Sidebar() {
                     <FaList />
                     Categories
                 </Link>
-
+{/* <Link
+    to={`/menu/${shop.slug}`}
+    target="_blank"
+    className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
+>
+    View Menu
+</Link> */}
                 <Link
                     to="/items"
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 mb-2"
@@ -74,7 +86,34 @@ export default function Sidebar() {
     <FaCashRegister />
     POS
 </Link>
+<Link
+    to="/expense-categories"
+    className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
+>
+    Expense Categories
+</Link>
 
+<Link
+    to="/expenses"
+    className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
+>
+    Expense 
+</Link>
+
+<Link
+    to="/reports"
+    className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
+>
+    Reports
+</Link>
+
+
+<Link
+    to="/customers"
+    className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
+>
+    Customers
+</Link>
             </nav>
 
             <div className="p-4">
