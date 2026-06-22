@@ -8,9 +8,11 @@ class Order extends Model
 {
     protected $fillable = [
         'shop_id',
+        'customer_id',
         'invoice_no',
         'total',
         'payment_method',
+        'status',
     ];
 
     public function items()

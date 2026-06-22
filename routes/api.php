@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\StaffController;
 
 
 
@@ -30,15 +31,40 @@ use App\Http\Controllers\Admin\MenuController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get(
+    '/public-shop/{slug}',
+    [ShopController::class, 'publicShop']
+);
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/staff', [StaffController::class, 'index']);
+    Route::post('/staff', [StaffController::class, 'store']);
+    Route::put('/staff/{id}', [StaffController::class, 'update']);
+    Route::delete('/staff/{id}', [StaffController::class, 'destroy']);
+    Route::get('/staff/{id}', [StaffController::class, 'show']);
+
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/settings', [ShopController::class, 'getSettings']);
     Route::put('/settings', [ShopController::class, 'updateSettings']);
+
+    //
+
+    // Route::get('/staff', [StaffController::class, 'index']);
+    // Route::post('/staff', [StaffController::class, 'store']);
+    // Route::put('/staff/{id}', [StaffController::class, 'update']);
+    // Route::delete('/staff/{id}', [StaffController::class, 'destroy']);
+
 });
+    
 
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dashboard/stats',[DashboardController::class,'stats']);
+
+   
 
 
 
@@ -130,6 +156,10 @@ Route::get(
     Route::get('/orders',[OrderController::class,'index']);
     Route::post('/orders',[OrderController::class,'store']);
     Route::get('/orders/{id}',[OrderController::class,'show']);
+    Route::put(
+    '/orders/{id}/status',
+    [OrderController::class, 'updateStatus']
+);
     Route::get(
     '/orders/{id}/download',
     [OrderController::class,'download']

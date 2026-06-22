@@ -122,7 +122,12 @@ export default function Dashboard() {
                         </p>
 
                     </div>
-
+   <div className="bg-white p-5 rounded-xl shadow">
+        <h3>Customers</h3>
+        <h2>
+            {stats?.customers || 0}
+        </h2>
+    </div>
                     <div className="bg-white rounded-xl shadow p-5">
 
                         <h3 className="text-gray-500">

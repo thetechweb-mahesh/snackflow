@@ -14,12 +14,19 @@ class OrderController extends Controller
 {
     public function index()
 {
-    return Order::where(
-        'shop_id',
-        auth()->user()->shop_id
-    )
-    ->latest()
-    ->get();
+    // return Order::where(
+    //     'shop_id',
+    //     auth()->user()->shop_id
+    // )
+    // ->latest()
+    // ->get();
+     return Order::with('customer')
+        ->where(
+            'shop_id',
+            auth()->user()->shop_id
+        )
+        ->latest()
+        ->get();
 }
     public function store(Request $request)
 {
@@ -67,6 +74,7 @@ class OrderController extends Controller
                 'subtotal' =>
                     $item->price *
                     $cartItem['qty']
+                    , 'status' => 'completed'
             ]);
         }
 
@@ -124,5 +132,34 @@ public function download($id)
     return $pdf->download(
         $order->invoice_no . '.pdf'
     );
+}
+
+
+
+//
+
+public function updateStatus(
+    Request $request,
+    $id
+)
+{
+    $request->validate([
+        'status' =>
+            'required|in:pending,completed,cancelled'
+    ]);
+
+    $order = Order::where(
+        'shop_id',
+        auth()->user()->shop_id
+    )->findOrFail($id);
+
+    $order->update([
+        'status' => $request->status
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Status Updated'
+    ]);
 }
 }

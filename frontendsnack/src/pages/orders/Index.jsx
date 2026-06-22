@@ -29,7 +29,32 @@ export default function Index() {
 
         }
     };
+const updateStatus = async (
+    status
+) => {
 
+    try {
+
+        await api.put(
+            `/orders/${id}/status`,
+            { status }
+        );
+
+        setOrder({
+            ...order,
+            status
+        });
+
+        alert(
+            "Status Updated"
+        );
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+};
     return (
         <DashboardLayout>
 
@@ -47,14 +72,14 @@ export default function Index() {
 
                 </div>
 
-                <button
+                {/* <button
                     onClick={() =>
                         navigate("/orders/create")
                     }
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg"
                 >
                     + New Order
-                </button>
+                </button> */}
 
             </div>
 
@@ -89,7 +114,9 @@ export default function Index() {
                             <th className="p-4 text-left">
                                 Actions
                             </th>
-
+<th className="p-4 text-left">
+                                Status
+                            </th>
                         </tr>
 
                     </thead>
@@ -136,11 +163,11 @@ export default function Index() {
                                         ).toLocaleDateString()}
                                     </td>
                                <td className="p-4">
-
+   {order.customer?.name || "Walk-In"}
                               
-                                {order.customer
+                                {/* {order.customer
                                     ? order.customer.name
-                                    : "Walk-In"}
+                                    : "Walk-In"} */}
 
                                </td>
                                     <td className="p-4">
@@ -155,8 +182,49 @@ export default function Index() {
                                         >
                                             View
                                         </button>
+                                      
 
                                     </td>
+                                    {/* <td>  {order.status}</td> */}
+                                    <td>
+    {/* <span
+        className={`px-2 py-1 rounded text-sm ${
+            order.status === "completed"
+                ? "bg-green-100 text-green-700"
+                : order.status === "pending"
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-red-100 text-red-700"
+        }`}
+    >
+        {order.status}
+    </span> */}
+
+     <select
+        value={
+            order?.status || ""
+        }
+        onChange={(e) =>
+            updateStatus(
+                e.target.value
+            )
+        }
+        className="border rounded-lg px-3 py-2"
+    >
+
+        <option value="pending">
+            Pending
+        </option>
+
+        <option value="completed">
+            Completed
+        </option>
+
+        <option value="cancelled">
+            Cancelled
+        </option>
+
+    </select>
+</td>
 
                                 </tr>
 

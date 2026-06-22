@@ -29,10 +29,9 @@ import CustomerIndex from "./pages/customers/Index";
 import CustomerCreate from "./pages/customers/Create";
 import CustomerEdit from "./pages/customers/Edit";
 import CustomerShow from "./pages/customers/Show";
-import OwnerRoute from "./components/Layout/OwnerRoute";
+
 import MenuShow from "./pages/menu/Show";
 import SettingsIndex from "./pages/settings/Index";
-import ShopLanding from "./pages/ShopLanding";
 function App() {
 
     return (
@@ -43,15 +42,7 @@ function App() {
             path="/"
             element={<Navigate to="/login" />}
         />
-{/* <Route
-    path="/menu/:slug"
-    element={<MenuShow />}
-/> */}
 
-<Route
-    path="/:slug"
-    element={<ShopLanding />}
-/>
         <Route
             path="/login"
             element={<Login />}
@@ -67,112 +58,34 @@ function App() {
             element={<Dashboard />}
         />
 
-        {/* new code start  */}
 <Route
     path="/categories"
-    element={
-        <OwnerRoute>
-            <Categories />
-        </OwnerRoute>
-    }
+    element={<Categories />}
 />
-
 <Route
     path="/items"
-    element={
-        <OwnerRoute>
-            <Items />
-        </OwnerRoute>
-    }
+    element={<Items />}
 />
-
-<Route
-    path="/expense-categories"
-    element={
-        <OwnerRoute>
-            <ExpenseCategoryIndex />
-        </OwnerRoute>
-    }
-/>
-
-<Route
-    path="/expenses"
-    element={
-        <OwnerRoute>
-            <ExprenseIndex />
-        </OwnerRoute>
-    }
-/>
-
-<Route
-    path="/reports"
-    element={
-        <OwnerRoute>
-            <ReportsIndex />
-        </OwnerRoute>
-    }
-/>
-
-<Route
-    path="/staff"
-    element={
-        <OwnerRoute>
-            <StaffIndex />
-        </OwnerRoute>
-    }
-/>
-
-<Route
-    path="/staff/create"
-    element={
-        <OwnerRoute>
-            <StaffCreate />
-        </OwnerRoute>
-    }
-/>
-
-<Route
-    path="/staff/:id/Edit"
-    element={
-        <OwnerRoute>
-            <StaffEdit />
-        </OwnerRoute>
-    }
-/>
-<Route
-    path="/staff/:slug"
-    element={
-        <OwnerRoute>
-            <StaffShow />
-        </OwnerRoute>
-    }
-/>
-
-
-<Route
-    path="/settings"
-    element={
-        <OwnerRoute>
-            <SettingsIndex />
-        </OwnerRoute>
-    }
-/>
-
-
-
-
-{/*  new end*/}
 
 <Route
     path="/pos"
     element={<POS />}
 />
-
-
 <Route path="/orders" element={<OrderIndex />} />
 <Route path="/orders/create" element={<OrderCreate />} />
 <Route path="/orders/:id" element={<OrderShow />} />
-
+<Route
+    path="/expense-categories"
+    element={<ExpenseCategoryIndex />}
+/>
+<Route
+    path="/expenses"
+    element={<ExprenseIndex />}
+/>
+<Route
+    path="/reports"
+    element={<ReportsIndex />}
+/>
 
 <Route
     path="/customers"
@@ -193,12 +106,34 @@ function App() {
 />
 
 
+<Route
+    path="/staff"
+    element={<StaffIndex />}
+/>
+<Route
+    path="/staff/create"
+    element={<StaffCreate />}
+/>
+
+<Route
+    path="/staff/:id/Edit"
+    element={<StaffEdit />}
+/>
+
+<Route
+    path="/staff/:slug"
+    element={<StaffShow />}
+/>
+
 
 <Route
     path="/menu/:slug"
     element={<MenuShow />}
 />
-
+<Route
+    path="/settings"
+    element={<SettingsIndex />}
+/>
     </Routes>
 </BrowserRouter>
     );

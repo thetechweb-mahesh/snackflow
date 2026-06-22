@@ -6,9 +6,6 @@ export default function POS() {
     const [categories, setCategories] = useState([]);
     const [items, setItems] = useState([]);
     const [cart, setCart] = useState([]);
-const [customers, setCustomers] =useState([]);
-
-const [customerId, setCustomerId] =useState("");
 
     const [selectedCategory, setSelectedCategory] =
         useState(null);
@@ -18,7 +15,6 @@ const [customerId, setCustomerId] =useState("");
 
     useEffect(() => {
         fetchCategories();
-         fetchCustomers();
         fetchItems();
     }, []);
 
@@ -120,27 +116,16 @@ const [customerId, setCustomerId] =useState("");
 const placeOrder = async () => {
 
     try {
-        console.log({
-    customer_id: customerId,
-  payment_method: paymentMethod,
-    items: cart
-});
 
-       const payload = {
+        const payload = {
 
-        
-    customer_id:
-        customerId || null,
+            payment_method: paymentMethod,
 
-      payment_method: paymentMethod,
-
-    items: cart.map(
-        (item) => ({
-            item_id: item.id,
-            qty: item.qty,
-        })
-    )
-};
+            items: cart.map((item) => ({
+                item_id: item.id,
+                qty: item.qty,
+            })),
+        };
 
         console.log(payload);
 
@@ -158,27 +143,6 @@ const placeOrder = async () => {
         console.log(error);
 
         alert("Failed to create order");
-    }
-};
-
-
-
-const fetchCustomers = async () => {
-    try {
-
-        const res =
-            await api.get(
-                "/customers"
-            );
-
-        setCustomers(
-            res.data
-        );
-
-    } catch (err) {
-
-        console.log(err);
-
     }
 };
     return (
@@ -223,48 +187,7 @@ const fetchCustomers = async () => {
 
                 {/* Items */}
 
-
-        
-
-
                 <div className="col-span-6 bg-white rounded-xl p-4">
-
-                      <div className="mb-4">
-
-    <label className="block mb-2 font-medium">
-        Customer
-    </label>
-
-    <select
-        value={customerId}
-        onChange={(e) =>
-            setCustomerId(
-                e.target.value
-            )
-        }
-        className="w-full border rounded-lg p-3"
-    >
-
-        <option value="">
-            Walk-In Customer
-        </option>
-
-        {customers.map(
-            (customer) => (
-
-                <option
-                    key={customer.id}
-                    value={customer.id}
-                >
-                    {customer.name}
-                </option>
-
-            )
-        )}
-
-    </select>
-
-</div>
 
                     <h2 className="font-bold mb-4">
                         Items

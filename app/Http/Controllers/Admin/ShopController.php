@@ -12,6 +12,13 @@ use Illuminate\Support\Str;
 
 class ShopController extends Controller
 {
+    public function publicShop($slug)
+{
+    return Shop::where(
+        'slug',
+        $slug
+    )->firstOrFail();
+}
     public function store(StoreShopRequest $request)
     {
         DB::beginTransaction();

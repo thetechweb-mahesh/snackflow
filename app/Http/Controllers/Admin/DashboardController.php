@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Customer;
 use App\Models\OrderItem;
 use App\Models\Item;
 use App\Models\Expense;
@@ -51,7 +52,11 @@ class DashboardController extends Controller
             Carbon::today()
         )
         ->count();
-
+        
+        $customers = Customer::where(
+            'shop_id',
+            $shopId
+        )->count();
         // Total Items
         $totalItems = Item::where(
             'shop_id',
@@ -90,6 +95,7 @@ class DashboardController extends Controller
             'today_expenses' => $todayExpenses,
             'today_profit'   => $todayProfit,
             'today_orders'   => $todayOrders,
+            'customers' => $customers,
             'total_items'    => $totalItems,
             'top_item'       => $topItem,
             'recent_orders'  => $recentOrders,
